@@ -1,3 +1,19 @@
+# Eheaphones
+
+[Link to live demo](https://youtu.be/nlPHzbDaI3s)
+
+### Special thanks first to JS Mastery for giving me inspiration for the design of the project
+
+[Link to JSM](https://www.youtube.com/watch?v=4mOkFXyxfsU&t=9312s)
+
+He gave me the design inspiration and helped me learn a few React tricks to help make my project come together!
+
+I took the stylistic design and thought I could take the design and the functionality one step further. I used sanity as a front end data base to store all the information for every product that displayed for sale on the store. Using Next.js and React's dynamic rendering capabilities made implementing this part of the project very simple. As well React's re useable component design sped up development by allowing me to make one product page and then tethering it with Next.js' server side rendering to generate pages for every single product.
+
+Using React Context I was able to apply full cart functionality site wide. This allowed for the easy flow of online shopping that most people are used to today. It also drastically simplified the checkout and purchasing processes.
+
+I custom built a checkout form, using React controlled components. Error handling is done on both the frontend and the backend to ensure proper validation. On the frontend I was able to tap into the application wide state held within context to be able to dynamically render the shopping cart contents into the checkout screen for customers to see what they were purchasing and how much it would cost. When the form is submitted the default behaviour is stopped and a trigger is sent to a custom api route. Next.js was instrumental here as well by coming with api routing of the box that makes making your own api routes a breeze. Using this feature, I hooked up the checkout submission button to an api call to a secondary MongoDB database that stores the customer's purchase along with their shipping address and order number. The final step in the purchase process is the random generation of an order number. Using nanoid, a random order number would be generated for each subsequent call to the checkout api. When successful the customer is routed to a success page where there order number is displayed to them.
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
@@ -22,8 +38,8 @@ The `pages/api` directory is mapped to `/api/*`. Files in this directory are tre
 
 To learn more about Next.js, take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+-   [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+-   [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
 
