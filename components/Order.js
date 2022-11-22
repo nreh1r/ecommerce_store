@@ -3,7 +3,7 @@ import React from "react"
 import { useStateContext } from "../context/StateContext"
 import { urlFor } from "../lib/client"
 
-const Order = () => {
+const Order = ({ discountPercent }) => {
     const {
         totalPrice,
         totalQuantities,
@@ -16,20 +16,36 @@ const Order = () => {
     const items = cartItems.map((item, i) => {
         return (
             <div key={i} className="checkout-item">
-                {/* <img
-                    src={urlFor(item?.image[0])}
-                    alt="Product Image"
-                    className="checkout-photo"
-                /> */}
-                <div className="name-quantity">
-                    <p>{item.name}</p>
-                    <p>Qty {item.quantity}</p>
+                <div className="checkout-product">
+                    <div className="checkout-image-container">
+                        <img
+                            src={urlFor(item?.image[0])}
+                            alt="Product Image"
+                            className="checkout-photo"
+                        />
+                    </div>
+                    <div className="name-quantity">
+                        <p>
+                            {item.name} -{" "}
+                            <span className="option-orders">
+                                {item.chosenOption.option}
+                            </span>
+                        </p>
+                        <p>Qty {item.quantity}</p>
+                    </div>
                 </div>
 
                 <p>${item.price * item.quantity}</p>
             </div>
         )
     })
+
+    console.log(discountPercent)
+
+    const priceWithDiscount = (
+        shipping +
+        totalPrice * (1 - discountPercent)
+    ).toFixed(2)
     return (
         <div className="order-container">
             <div className="order">
@@ -49,7 +65,7 @@ const Order = () => {
             </div>
             <div className="checkout-total">
                 <p>TOTAL</p>
-                <p>${totalPrice + shipping}</p>
+                <p>${priceWithDiscount}</p>
             </div>
             <div className="etransfer">
                 <h4 className="etransfer-title">Etransfer</h4>

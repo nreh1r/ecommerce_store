@@ -1,14 +1,8 @@
 # Eheaphones
 
-[Link to live demo](https://youtu.be/nlPHzbDaI3s)
+This project is a fully functioning Ecommerce website.
 
-### Special thanks first to JS Mastery for giving me inspiration for the design of the project
-
-[Link to JSM](https://www.youtube.com/watch?v=4mOkFXyxfsU&t=9312s)
-
-He gave me the design inspiration and helped me learn a few React tricks to help make my project come together!
-
-I took the stylistic design and thought I could take the design and the functionality one step further. I used sanity as a front end data base to store all the information for every product that displayed for sale on the store. Using Next.js and React's dynamic rendering capabilities made implementing this part of the project very simple. As well React's re useable component design sped up development by allowing me to make one product page and then tethering it with Next.js' server side rendering to generate pages for every single product.
+I took a stylistic design and thought I could take the design and the functionality one step further. I used sanity as a front end data base to store all the information for every product that displayed for sale on the store. Using Next.js and React's dynamic rendering capabilities made implementing this part of the project very simple. As well React's re useable component design sped up development by allowing me to make one product page and then tethering it with Next.js' server side rendering to generate pages for every single product.
 
 Using React Context I was able to apply full cart functionality site wide. This allowed for the easy flow of online shopping that most people are used to today. It also drastically simplified the checkout and purchasing processes.
 

@@ -89,6 +89,9 @@ const Cart = () => {
                                         <h5>{item.name}</h5>
                                         <h4>${item.price}</h4>
                                     </div>
+                                    <p className="option-type">
+                                        {item.chosenOption.option}
+                                    </p>
                                     <div className="flex bottom">
                                         <div>
                                             <p className="quantity-desc">
@@ -97,7 +100,9 @@ const Cart = () => {
                                                     onClick={() =>
                                                         toggleCartItemQuantity(
                                                             item._id,
-                                                            "dec"
+                                                            "dec",
+                                                            item.chosenOption
+                                                                ._key
                                                         )
                                                     }
                                                 >
@@ -111,7 +116,9 @@ const Cart = () => {
                                                     onClick={() =>
                                                         toggleCartItemQuantity(
                                                             item._id,
-                                                            "inc"
+                                                            "inc",
+                                                            item.chosenOption
+                                                                ._key
                                                         )
                                                     }
                                                 >

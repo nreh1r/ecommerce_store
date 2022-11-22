@@ -31,13 +31,24 @@ export const StateContext = ({ children }) => {
     let foundProduct
     let index
 
-    const onAdd = (product, quantity) => {
-        const checkProducInCart = cartItems.find(
-            (item) => item._id === product._id
-        )
+    const onAdd = (product, quantity, chosenOption) => {
+        const new_item = {
+            ...product,
+            chosenOption,
+            price: chosenOption.price,
+        }
+        console.log("In the add item")
+        console.log(new_item.chosenOption.option)
+        const checkProducInCart = cartItems.find((item) => {
+            console.log(item)
+            return (
+                item._id === new_item._id &&
+                item.chosenOption.option === new_item.chosenOption.option
+            )
+        })
 
         setTotalPrice((prevTotalPrice) => {
-            return prevTotalPrice + parseInt(product.price) * quantity
+            return prevTotalPrice + parseInt(chosenOption.price) * quantity
         })
 
         setTotalQuantities(
@@ -55,23 +66,29 @@ export const StateContext = ({ children }) => {
 
             setCartItems(updatedCartItems)
         } else {
-            product.quantity = quantity
+            new_item.quantity = quantity
 
-            setCartItems([...cartItems, { ...product }])
+            setCartItems([...cartItems, { ...new_item }])
         }
 
-        toast.success(`${qty} ${product.name} added to the cart`)
+        toast.success(`${qty} ${new_item.name} added to the cart`)
     }
 
     const onRemove = (product) => {
-        foundProduct = cartItems.find((item) => item._id === product._id)
-        const newCartItems = cartItems.filter(
-            (item) => item._id !== product._id
+        foundProduct = cartItems.find(
+            (item) =>
+                item._id === product._id &&
+                item.chosenOption.option === product.chosenOption.option
         )
-
+        console.log(foundProduct)
+        const newCartItems = cartItems.filter(
+            (item) => item.chosenOption._key !== product.chosenOption._key
+        )
+        console.log(newCartItems)
         setTotalPrice(
             (prevTotalPrice) =>
-                prevTotalPrice - foundProduct.price * foundProduct.quantity
+                prevTotalPrice -
+                foundProduct.chosenOption.price * foundProduct.quantity
         )
         setTotalQuantities(
             (prevTotalQuantities) => prevTotalQuantities - foundProduct.quantity
@@ -79,11 +96,17 @@ export const StateContext = ({ children }) => {
         setCartItems(newCartItems)
     }
 
-    const toggleCartItemQuantity = (id, value) => {
-        foundProduct = cartItems.find((item) => item._id === id)
-        index = cartItems.findIndex((product) => product._id === id)
+    const toggleCartItemQuantity = (id, value, key) => {
+        foundProduct = cartItems.find(
+            (item) => item._id === id && item.chosenOption._key === key
+        )
+        index = cartItems.findIndex(
+            (product) => product._id === id && product.chosenOption._key === key
+        )
 
-        const newCartItems = cartItems.filter((item) => item._id !== id)
+        const newCartItems = cartItems.filter(
+            (item) => item.chosenOption._key !== key
+        )
 
         if (value === "inc") {
             setCartItems([
@@ -145,7 +168,12 @@ export const StateContext = ({ children }) => {
             totalQuantities,
         }
 
+        const orderItems = {
+            cartItems,
+        }
+
         try {
+            await sendStockData(orderItems)
             await sendOrderData(orderData)
             setRequestStatus("success")
             setFormData({
@@ -176,7 +204,6 @@ export const StateContext = ({ children }) => {
     }
 
     async function sendOrderData(order) {
-        console.log("in here")
         const response = await fetch("/api/order", {
             method: "POST",
             body: JSON.stringify(order),
@@ -190,6 +217,16 @@ export const StateContext = ({ children }) => {
         if (!response.ok) {
             throw new Error(data.message || "Something went wrong")
         }
+    }
+
+    async function sendStockData(order) {
+        const response = await fetch("/api/stock", {
+            method: "POST",
+            body: JSON.stringify(order),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
     }
 
     return (

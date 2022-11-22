@@ -48,5 +48,20 @@ export default {
             type: "array",
             of: [{ type: "string" }],
         },
+        {
+            name: "options",
+            title: "Options",
+            type: "array",
+            of: [
+                {
+                    type: "object",
+                    fields: [
+                        { name: "price", type: "number", title: "Price" },
+                        { name: "option", type: "string", title: "Option" },
+                        { name: "stock", type: "number", title: "Stock" },
+                    ],
+                },
+            ],
+        },
     ],
 }

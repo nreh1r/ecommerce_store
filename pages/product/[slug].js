@@ -14,34 +14,51 @@ import { useStateContext } from "../../context/StateContext"
 import { useRouter } from "next/router"
 
 const ProductDetails = ({ product, products }) => {
-    const { image, name, details, price, choices } = product
+    const { image, name, details, price } = product
     const [index, setIndex] = useState(0)
-    const [productChoice, setProductChoice] = useState(
-        choices !== undefined ? choices[0] : ""
+    const [chosenOption, setChosenOption] = useState(
+        product.options !== undefined ? product.options[0] : ""
     )
-    const [prodId, setProdId] = useState(0)
+    const [isChosen, setIsChosen] = useState(false)
     const { decQty, incQty, qty, onAdd } = useStateContext()
     const router = useRouter()
 
-    function buyNow(product, qty) {
-        onAdd(product, qty)
+    function buyNow(product, qty, chosenOption) {
+        onAdd(product, qty, chosenOption)
         router.push("/checkout")
     }
 
-    let options
-    if (choices !== undefined) {
-        options = choices.map((choice, id) => (
-            <option value={choice} key={id} id={id}>
-                {choice}
-            </option>
-        ))
+    let prod_types
+    if (product.options !== undefined) {
+        prod_types = product.options.map((option, id) => {
+            const isSoldOut = option.stock === 0 ? true : false
+            return (
+                <option
+                    value={option.option}
+                    disabled={isSoldOut}
+                    key={option._key}
+                    id={id}
+                >
+                    {option.option}
+                    {isSoldOut && ": Sold Out"}
+                </option>
+            )
+        })
     }
-
     function handleChange(event) {
-        setProductChoice(event.target.value)
-        setProdId(choices.indexOf(event.target.value))
+        const option_index = product.options.findIndex(
+            (option) => option.option === event.target.value
+        )
+        if (option_index < 0) {
+            option_index = 0
+        }
+        if (event.target.value === "") {
+            setIsChosen(false)
+        } else {
+            setIsChosen(true)
+        }
+        setChosenOption(product.options[option_index])
     }
-
     return (
         <div>
             <div className="product-detail-container">
@@ -79,7 +96,7 @@ const ProductDetails = ({ product, products }) => {
                     </div>
                     <h4>Details</h4>
                     <p>{details}</p>
-                    <p className="price">${price}</p>
+                    <p className="price">${chosenOption.price}</p>
                     <div className="quantity">
                         <h3>Quantity:</h3>
                         <p className="quantity-desc">
@@ -96,22 +113,31 @@ const ProductDetails = ({ product, products }) => {
                         <button
                             type="button"
                             className="add-to-cart"
-                            onClick={() => onAdd(product, qty)}
+                            onClick={() => onAdd(product, qty, chosenOption)}
                         >
                             Add to Cart
                         </button>
                         <button
                             type="button"
                             className="buy-now"
-                            onClick={() => buyNow(product, qty)}
+                            onClick={() => buyNow(product, qty, chosenOption)}
                         >
                             Buy Now
                         </button>
                     </div>
-                    {choices && (
-                        <select onChange={(event) => handleChange(event)}>
-                            {options}
+                    {product.options && (
+                        <select
+                            onChange={(event) => handleChange(event)}
+                            className="options-container"
+                        >
+                            <option value="">Please Select a Model</option>
+                            {prod_types}
                         </select>
+                    )}
+                    {isChosen && (
+                        <span className="stock-count">
+                            {chosenOption.stock} in stock
+                        </span>
                     )}
                 </div>
             </div>
