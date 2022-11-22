@@ -200,7 +200,7 @@ export const StateContext = ({ children }) => {
         setCartItems([])
         setTotalPrice(0)
         setTotalQuantities(0)
-        router.push("/checkout/success")
+        router.push("/checkout/Success")
     }
 
     async function sendOrderData(order) {

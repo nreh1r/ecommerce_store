@@ -1,7 +1,7 @@
 import React from "react"
 import { useStateContext } from "../../context/StateContext"
 
-const success = () => {
+const Success = () => {
     const { orderNumber } = useStateContext()
     return (
         <div>
@@ -12,4 +12,4 @@ const success = () => {
     )
 }
 
-export default success
+export default Success
